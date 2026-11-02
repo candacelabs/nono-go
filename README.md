@@ -1,6 +1,8 @@
 # nono-go
 
-## This project will be archived as of 11/01/2026 
+## This is a fork of the original archived repo.
+
+It will be developed intermittently but it's going to be specifically targeted at single board/commodity compute infrastructures for robots, which may or may not fit your use-case.
 
 [![CI](https://github.com/nolabs-ai/nono-go/actions/workflows/ci.yml/badge.svg)](https://github.com/nolabs-ai/nono-go/actions/workflows/ci.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/nolabs-ai/nono-go.svg)](https://pkg.go.dev/github.com/nolabs-ai/nono-go)
