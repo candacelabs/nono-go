@@ -1,12 +1,65 @@
 # nono-go
 
-## This is a fork of the original archived repo.
+**Candace Labs' fork of [nolabs-ai/nono-go](https://github.com/nolabs-ai/nono-go)**, which is archived. Every agent [csf](https://github.com/candacelabs) runs is sandboxed through this package, so we keep it working and current. Issues and pull requests are welcome.
 
-The original [nolabs-ai/nono-go](https://github.com/nolabs-ai/nono-go) has been archived. Candace Labs is carrying it forward: we use nono to sandbox the agents we run.
+## Why we forked
 
-We are not the original developers, so this fork's intent and design may drift from the original project over time. When a change departs from the original behavior, we will say so in its pull request and release notes. Issues and pull requests are welcome.
+| | nolabs-ai/nono-go | this fork |
+|---|---|---|
+| maintained | archived | yes: csf depends on it |
+| limit what a sandboxed process may **execute** | no: read access implies execute | `RestrictExecute` |
+| `linux/amd64` library | 21 MB, needs glibc 2.38 (`__isoc23_*`) | 3.3 MB, no TLS stack, links on older distributions |
+| where the library comes from | a prebuilt v0.65.1 artifact | built from [candacelabs/nono](https://github.com/candacelabs/nono) by Nix, pinned in `flake.lock` |
 
-It will be developed intermittently, and it is aimed at single-board and commodity compute for robots, which may or may not fit your use case.
+## What's different
+
+### `RestrictExecute`: reading a file no longer means running it
+
+Upstream, a path you may read is a path you may execute:
+
+```go
+caps := nono.New()
+caps.AllowPath("/", nono.AccessRead)
+nono.Apply(caps)
+
+exec.Command("/usr/bin/curl", "https://example.com").Run() // runs
+```
+
+This fork adds a second Landlock layer that handles only the execute right:
+
+```go
+caps := nono.New()
+caps.AllowPath("/", nono.AccessRead)
+nono.Apply(caps)
+nono.RestrictExecute([]string{"/usr/bin/git"})
+
+exec.Command("/usr/bin/curl", "https://example.com").Run() // permission denied
+exec.Command("/usr/bin/git", "--version").Run()            // runs
+```
+
+Linux amd64 only; elsewhere it returns `ErrUnsupportedPlatform`. It wraps `nono_sandbox_restrict_execute` from [candacelabs/nono](https://github.com/candacelabs/nono)'s C binding.
+
+### The `linux/amd64` library, built from source
+
+| upstream | this fork |
+|---|---|
+| built from nolabs-ai/nono v0.65.1 | built by `nix build .#nono-ffi` from candacelabs/nono `main` with Sigstore off (steps: [Building native libraries](#building-native-libraries)) |
+
+```sh
+nix build .#nono-ffi      # pinned by flake.lock
+nix flake update nono     # follow candacelabs/nono main
+```
+
+## Using this fork
+
+Keep the upstream import path and take this fork's code with a `replace` (the version is the commit csf pins):
+
+```go
+// go.mod
+replace github.com/nolabs-ai/nono-go => github.com/candacelabs/nono-go v0.0.0-20261103023903-747acad656e5
+```
+
+---
 
 [![CI](https://github.com/nolabs-ai/nono-go/actions/workflows/ci.yml/badge.svg)](https://github.com/nolabs-ai/nono-go/actions/workflows/ci.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/nolabs-ai/nono-go.svg)](https://pkg.go.dev/github.com/nolabs-ai/nono-go)
