@@ -2,7 +2,7 @@
 
 ## This is a fork of the original archived repo.
 
-The original [nolabs-ai/nono-go](https://github.com/nolabs-ai/nono-go) has been archived. Candace Labs is carrying it forward: we use nono to sandbox the agents we run, and maintaining these bindings in the open is our way of giving back to the community that built them. Thank you to the nono authors and contributors for the work this fork stands on.
+The original [nolabs-ai/nono-go](https://github.com/nolabs-ai/nono-go) has been archived. Candace Labs is carrying it forward: we use nono to sandbox the agents we run.
 
 We are not the original developers, so this fork's intent and design may drift from the original project over time. When a change departs from the original behavior, we will say so in its pull request and release notes. Issues and pull requests are welcome.
 
