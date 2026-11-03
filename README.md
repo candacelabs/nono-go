@@ -2,7 +2,11 @@
 
 ## This is a fork of the original archived repo.
 
-It will be developed intermittently but it's going to be specifically targeted at single board/commodity compute infrastructures for robots, which may or may not fit your use-case.
+The original [nolabs-ai/nono-go](https://github.com/nolabs-ai/nono-go) has been archived. Candace Labs is carrying it forward: we use nono to sandbox the agents we run, and maintaining these bindings in the open is our way of giving back to the community that built them. Thank you to the nono authors and contributors for the work this fork stands on.
+
+We are not the original developers, so this fork's intent and design may drift from the original project over time. When a change departs from the original behavior, we will say so in its pull request and release notes. Issues and pull requests are welcome.
+
+It will be developed intermittently, and it is aimed at single-board and commodity compute for robots, which may or may not fit your use case.
 
 [![CI](https://github.com/nolabs-ai/nono-go/actions/workflows/ci.yml/badge.svg)](https://github.com/nolabs-ai/nono-go/actions/workflows/ci.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/nolabs-ai/nono-go.svg)](https://pkg.go.dev/github.com/nolabs-ai/nono-go)
