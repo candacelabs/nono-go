@@ -9,3 +9,5 @@ coverage.html
 
 # macOS
 .DS_Store
+result-ffi
+build-ffi.log

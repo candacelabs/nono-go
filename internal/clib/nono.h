@@ -340,6 +340,34 @@ enum NonoErrorCode nono_capability_set_set_network_blocked(struct NonoCapability
                                                            bool blocked);
 
 /**
+ * Disable the implicit macOS DNS resolver grants in blocked and proxy-only modes.
+ *
+ * Does not change the network mode or revoke explicit socket, localhost, proxy,
+ * or platform-rule grants. Has no enforcement effect on Linux or in allow-all
+ * mode, and is not a general DNS filter. The setting survives network-mode
+ * changes and sandbox-state serialization.
+ *
+ * Returns `Ok` on success, or `ErrInvalidArg` if `caps` is NULL.
+ *
+ * # Safety
+ *
+ * `caps` must be a valid pointer from `nono_capability_set_new()` or NULL.
+ */
+enum NonoErrorCode nono_capability_set_block_dns(struct NonoCapabilitySet *caps);
+
+/**
+ * Whether implicit macOS DNS resolver grants are enabled (the default).
+ *
+ * This queries the capability setting, not whether DNS is reachable under the
+ * effective sandbox policy. Returns false if `caps` is NULL.
+ *
+ * # Safety
+ *
+ * `caps` must be a valid pointer or NULL.
+ */
+bool nono_capability_set_dns_enabled(const struct NonoCapabilitySet *caps);
+
+/**
  * Set the network mode.
  *
  * Use `NONO_NETWORK_MODE_BLOCKED`, `NONO_NETWORK_MODE_ALLOW_ALL`, or
@@ -687,6 +715,28 @@ bool nono_sandbox_is_supported(void);
  * `nono_string_free()`.
  */
 struct NonoSupportInfo nono_sandbox_support_info(void);
+
+/**
+ * Restrict which files the current process and all its children may
+ * execute to `paths`.
+ *
+ * This stacks a second Landlock layer that handles only the execute right:
+ * a file outside `paths` can no longer be executed, even where
+ * `nono_sandbox_apply()` granted read access (which includes execute). Read
+ * and write grants are unaffected. Like `nono_sandbox_apply()`, it is
+ * **irreversible**. Call it after `nono_sandbox_apply()`.
+ *
+ * Requires Linux with Landlock ABI v3 or later; elsewhere it returns
+ * `ErrUnsupportedPlatform`. With `count` 0, nothing may be executed.
+ *
+ * Returns `Ok` on success.
+ *
+ * # Safety
+ *
+ * When `count` is non-zero, `paths` must point to `count` valid
+ * NUL-terminated UTF-8 strings.
+ */
+enum NonoErrorCode nono_sandbox_restrict_execute(const char *const *paths, uintptr_t count);
 
 /**
  * Create a state snapshot from a capability set.

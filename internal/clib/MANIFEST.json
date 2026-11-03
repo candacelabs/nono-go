@@ -2,7 +2,7 @@
   "schema": 1,
   "header": {
     "path": "internal/clib/nono.h",
-    "sha256": "eba5a46677862d1e2e73400673d820ffc37697910c951140a3fde18cd66bc142"
+    "sha256": "9d4097d1bae75871a5758fcc0ef828e9b8bf22c677546c837e09f6b0300c1f06"
   },
   "libs": [
     {
@@ -21,7 +21,7 @@
       "platform": "linux_amd64",
       "target": "x86_64-unknown-linux-gnu",
       "path": "internal/clib/linux_amd64/libnono_ffi.a",
-      "sha256": "111db8f964527f5cacc127d723e9b899f7a691c6f85a0378d286df35eef87a05"
+      "sha256": "03081ea59096aacafd5d04a701ea700d53ba81bb9d8bdc890a24b3fdfc99c1f8"
     },
     {
       "platform": "linux_arm64",
@@ -49,8 +49,8 @@
       "platform": "linux_amd64",
       "target": "x86_64-unknown-linux-gnu",
       "path": "internal/clib/linux_amd64/VERSION",
-      "commit": "1d1c88c9f98f0a1f3ff79cff1509713aaec7cdb0",
-      "sha256": "f698979dd8e477f1233977a3ff4f372ce86c8b2a26b11e765e7268605bf94062"
+      "commit": "79f18ad817f56fca380f303e3977169ce5063e5e",
+      "sha256": "82b81a077c3f2c79172a32e3b45316c5a3d8b165388532f492820f7c3c4d8f13"
     },
     {
       "platform": "linux_arm64",

@@ -39,7 +39,23 @@ go get github.com/nolabs-ai/nono-go
 
 ## Building native libraries
 
-The bundled libraries are built from the upstream [nono](https://github.com/nolabs-ai/nono) repository using `scripts/build-libs.sh`. Run this script when you want to update the bundled libraries to a newer nono upstream commit.
+### Linux amd64 (Nix)
+
+The `linux_amd64` library and `internal/clib/nono.h` are built with Nix from [candacelabs/nono](https://github.com/candacelabs/nono) `main`, a flake input pinned in `flake.lock`. That fork is upstream nono v0.81.0 plus optional sigstore verification ([nolabs-ai/nono#2030](https://github.com/nolabs-ai/nono/pull/2030)) and `nono_sandbox_restrict_execute` in the C binding:
+
+```sh
+nix flake update nono   # only to move to a newer fork commit
+nix build .#nono-ffi
+cp result/lib/libnono_ffi.a internal/clib/linux_amd64/
+cp result/include/nono.h internal/clib/nono.h
+make clib-manifest-update
+```
+
+Without sigstore the library has no TLS stack and no C dependencies, so it is plain Rust and links on any system with glibc 2.28 or newer.
+
+### Other platforms
+
+The other bundled libraries are built from the upstream [nono](https://github.com/nolabs-ai/nono) repository using `scripts/build-libs.sh`. Run this script when you want to update them to a newer nono upstream commit.
 
 **Requirements:** `cargo` (for Apple targets), Docker (for Linux targets — uses `rust:latest` via emulation)
 
